@@ -42,9 +42,15 @@ const LoginScreen = () => {
         
         try {
             setIsLoading(true);
+
             const data = await sendOtp({ name, email, phone_number: phone });
             console.log(data, 'data');
+
+//            console.log("Success value:", data?.success);
             if(data?.success === true) {
+//                const { access, refresh } = data; // Assuming the response contains access and refresh tokens
+//                await SecureStore.setItemAsync('accessToken', access);
+//                await SecureStore.setItemAsync('refreshToken', refresh);
                 flashMessage(data?.message, 'success');
                 await SecureStore.setItemAsync('phone', phone);
                 navigation.navigate('OTP');

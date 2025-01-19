@@ -1,10 +1,14 @@
 import api from './api';
 
 export const sendOtp = async (body) => {
-    console.log(body, 'body');
-    const { data } = await api.post('/users/signup/', body);
-    console.log(data, 'auth');
-    return data;
+     try {
+        console.log(body, 'body');
+        const { data } = await api.post('/users/signup/', body);
+        console.log(data, 'auth:');
+        return data;
+    } catch (error) {
+         return { success: false, message: 'An error occurred during the OTP request' };
+    }
 }
 
 export const verifyOtp = async (body) => {

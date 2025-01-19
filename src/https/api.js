@@ -63,7 +63,8 @@ api.interceptors.response.use(
         return response;  // If response is successful, just return it
     },
     async (error) => {
-        const refreshToken = await SecureStore.getItemAsync('refreshToken');
+            const refreshToken = await SecureStore.getItemAsync('refreshToken');
+            console.log(refreshToken);
 
         // Debugging: Check if refreshToken is null or undefined
         if (!refreshToken) {
