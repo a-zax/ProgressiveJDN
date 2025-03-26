@@ -3,7 +3,8 @@ from django.urls import path
 from jan_dhan_darshak.users.api.views import (
     UserLoginViewset,
     VoiceToText,
-)  # , VerifyOtpViewset
+    # VerifyOtpViewset,
+)
 
 from jan_dhan_darshak.users.views import (
     user_detail_view,

@@ -15,12 +15,10 @@ if settings.DEBUG:
 else:
     router = SimpleRouter()
 
-# router.register("users", UserViewSet)
-
+router.register("users", UserViewSet)  # Uncommented to enable user registration
 
 app_name = "api"
 urlpatterns = router.urls
-
 
 urlpatterns += [
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

@@ -14,7 +14,7 @@ import datetime
 
 # Create suggestions
 class missingSuggestion(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         try:
@@ -37,16 +37,15 @@ class missingSuggestion(APIView):
                     )
 
             serializer = MissingSuggestionsSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(
-                    response_payload(
-                        success=True,
-                        data=serializer.data,
-                        msg="Thank you for the Suggestion!",
-                    ),
-                    status=status.HTTP_200_OK,
-                )
+            serializer.save()
+            return Response(
+                 response_payload(
+                    success=True,
+                    data=serializer.data,
+                    msg="Thank you for the Suggestion!",
+                ),
+                status=status.HTTP_200_OK,
+            )
             return Response(
                 response_payload(
                     success=False, data=serializer.errors, msg="Invalid Data!"
