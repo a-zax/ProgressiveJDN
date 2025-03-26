@@ -1,6 +1,6 @@
 import api from './api';
 
-export const createSuggestion = async (accessToken,body ) => {
+export const createSuggestion = async (body ) => {
     console.log(body,'suggestion')
     const config = {
         headers: {
@@ -8,12 +8,12 @@ export const createSuggestion = async (accessToken,body ) => {
             authorization: `Bearer ${accessToken}`,
         }
     }
-    const { data } = await api.post('/suggestions/', body, config);
+    const { data } = await post('/suggestions/', body, config);
     console.log(data, 'create suggestions');
     return data;
 }
 
-export const SuggestionByUser = async (accessToken,body ) => {
+export const SuggestionByUser = async (body ) => {
     console.log(body,'suggestion')
     const config = {
         headers: {

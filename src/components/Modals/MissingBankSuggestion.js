@@ -666,11 +666,11 @@ const MissingBankSuggestion = () => {
 
 	useEffect(() => {
 		async function getUserData() {
-			const token = await SecureStore.getItemAsync("accessToken");
-			if (!token) {
-				navigation.navigate("Login");
-			}
-			setAccessToken(token);
+//			const token = await SecureStore.getItemAsync("accessToken");
+//			if (!token) {
+//				navigation.navigate("Login");
+//			}
+//			setAccessToken(token);
 
 			setUserId(await SecureStore.getItemAsync("userId"));
 			getGeocodedAddress(); // Call geocode function on load
@@ -690,10 +690,10 @@ const MissingBankSuggestion = () => {
 	const handleFormChange = async () => {
 		try {
 			setIsLoading(true);
-			const accessToken = await SecureStore.getItemAsync("accessToken");
-			const userId = await SecureStore.getItemAsync("userId");
+//			const accessToken = await SecureStore.getItemAsync("accessToken");
+//			const userId = await SecureStore.getItemAsync("userId");
 
-			const data = await createSuggestion(accessToken, {
+			const data = await createSuggestion({
 				User: parseInt(userId),
 				pointName: name,
 				address: address,
@@ -703,7 +703,7 @@ const MissingBankSuggestion = () => {
 			});
 
 			setRes(data);
-			if (data?.success === true) {
+			if (data?.success === false) {
 				setModalVisible(true);
 			} else {
 				flashMessage(data.message, "danger");

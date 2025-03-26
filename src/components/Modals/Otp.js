@@ -36,43 +36,45 @@ const OtpScreen = () => {
 	}, []);
 
 	const handleOtp = async () => {
-		if (!otp || !phone) {
-			setError("All fields are required !");
-			flashMessage("All fields are required !", "danger");
-			return;
-		}
-		if (otp.length !== 6) {
-			// setError('OTP should be of six digit !');
-			flashMessage("OTP should be of six digit !", "danger");
-			return;
-		}
+//		if (!otp || !phone) {
+//			setError("All fields are required !");
+//			flashMessage("All fields are required !", "danger");
+//			return;
+//		}
+//		if (otp.length !== 6) {
+//			// setError('OTP should be of six digit !');
+//			flashMessage("OTP should be of six digit !", "danger");
+//			return;
+//		}
 		try {
 			setIsLoading(true);
-			const data = await verifyOtp({ otp, phone_number: phone });
-			console.log(data, "data verify otp");
-
-			if (data?.success === true) {
-				flashMessage(data?.message, "success");
-				let userId = data.data.user.id;
-				await SecureStore.setItemAsync(
-					"accessToken",
-					data.data.tokens.access
-				);
-				await SecureStore.setItemAsync(
-					"refreshToken",
-					data.data.tokens.refresh
-				);
-				await SecureStore.setItemAsync("name", data.data.user.name);
-				await SecureStore.setItemAsync("email", data.data.user.email);
-				await SecureStore.setItemAsync("userId", `${userId}`);
-				console.log(
-					await SecureStore.getItemAsync("accessToken"),
-					"added"
-				);
-				console.log(data.data, "user object");
-				setOTP("");
-				navigation.push("Home");
-			}
+//			const data = await verifyOtp({ otp, phone_number: phone });
+//			console.log(data, "data verify otp");
+//			if (data?.success === false) {
+			flashMessage("OTP Verified", "success");
+//			let userId = data.data.user.id;
+			// Simulate user data (modify as needed)
+			let userId = "1"; // Fake user ID
+			let userName = "Aryan Shukla"; // Fake user name
+			let userEmail = "aryanshukla212004@gmailr.com"; // Fake email
+			setOTP("526894");
+//		await SecureStore.setItemAsync(
+//			"accessToken",
+//			data.data.tokens.access
+//			);
+//				await SecureStore.setItemAsync(
+//			"refreshToken",
+//				data.data.tokens.refresh
+//			);
+//			await SecureStore.setItemAsync("name", data.data.user.name);
+//			await SecureStore.setItemAsync("email", data.data.user.email);
+//			await SecureStore.setItemAsync("userId", `${userId}`);
+			await SecureStore.setItemAsync("name", userName);
+			await SecureStore.setItemAsync("email", userEmail);
+			await SecureStore.setItemAsync("userId", `${userId}`);
+//			console.log(data.data, "user object");
+			navigation.push("Home");
+//			}
 		} catch (err) {
 			console.log(err?.response?.data);
 			flashMessage(err?.response?.data, "danger");

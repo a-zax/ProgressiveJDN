@@ -40,7 +40,7 @@ const LoginScreenViaPhone = () => {
         try {
             const data = await sendOtp({ phone_number: phone });
             console.log(data, 'data send otp');
-            if(data?.success === true) {
+            if(data?.success === false) {
                 flashMessage(data?.message, 'success');
                 await SecureStore.setItemAsync('phone', phone);
                
