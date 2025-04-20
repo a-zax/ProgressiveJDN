@@ -19,7 +19,7 @@ const InputField = ({
 	keyboardType,
 	disabled = true,
 }) => {
-	// const [sound, setSound] = useState();
+	const [sound, setSound] = useState();
 
 	const startRecording = async () => {
 		try {
@@ -50,24 +50,24 @@ const InputField = ({
 		console.log("Recording stopped and stored at", uri);
 	};
 
-	//   async function playSound() {
-	//     console.log('Loading Sound');
-	//     const { sound } = await Audio.Sound.createAsync(
-	//         { uri: uri },
-	//         { shouldPlay: true }
-	//     );
-	//     setSound(sound);
+	  async function playSound() {
+	    console.log('Loading Sound');
+	    const { sound } = await Audio.Sound.createAsync(
+	        { uri: uri },
+	        { shouldPlay: true }
+	    );
+	    setSound(sound);
 
-	//     console.log('Playing Sound');
-	//     await sound.playAsync(); }
+	    console.log('Playing Sound');
+	    await sound.playAsync(); }
 
-	//     useEffect(() => {
-	//         return sound
-	//         ? () => {
-	//             console.log('Unloading Sound');
-	//             sound.unloadAsync(); }
-	//         : undefined;
-	//     }, [sound]);
+	    useEffect(() => {
+	        return sound
+	        ? () => {
+	            console.log('Unloading Sound');
+	            sound.unloadAsync(); }
+	        : undefined;
+	    }, [sound]);
 
 	return (
 		<View style={styles.container}>

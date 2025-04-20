@@ -441,6 +441,8 @@
 
 // export default Map;
 
+
+// // Final Code
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -492,7 +494,7 @@ const Map = ({ missingBank }) => {
       try {
         let allMarkers = [];
         for (const category of categories) {
-          const url = `https://api.geoapify.com/v2/places?categories=${category.name}&filter=circle:${longitude},${latitude},2000&limit=20&apiKey=${GEOAPIFY_API_KEY}`;
+          const url = `https://api.geoapify.com/v2/places?categories=${category.name}&filter=circle:${longitude},${latitude},10000&limit=20&apiKey=${GEOAPIFY_API_KEY}`;
           const response = await fetch(url);
           const json = await response.json();
 
@@ -563,13 +565,14 @@ const Map = ({ missingBank }) => {
 
         {missingBank && location && (
           <Marker
-            title="Unknown Location"
-            coordinate={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-            }}
-            pinColor="orange"
-          />
+          key={place.id}
+          coordinate={{ latitude: place.latitude, longitude: place.longitude }}
+          title={place.name}
+          description={place.address}
+        >
+          <View style={[styles.customMarker, { backgroundColor: place.color }]} />
+        </Marker>
+
         )}
       </MapView>
 
@@ -622,6 +625,13 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginRight: 6,
   },
+  customMarker: {
+    width: 5,      // smaller width
+    height: 5,     // smaller height
+    borderRadius: 6,
+    borderColor: "#fff",
+    borderWidth: 1.5,
+  },  
   legendLabel: {
     fontSize: 12,
     color: "#333",
@@ -629,3 +639,288 @@ const styles = StyleSheet.create({
 });
 
 export default Map;
+
+// import React, { useState, useEffect } from "react";
+// import {
+//   View,
+//   StyleSheet,
+//   Dimensions,
+//   Text,
+//   Platform,
+//   Linking,
+//   TouchableOpacity,
+// } from "react-native";
+// import { useIsFocused, useRoute } from "@react-navigation/native";
+// import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "react-native-maps";
+// import * as Location from "expo-location";
+// import { flashMessage } from "../lottie/flashMessage";
+
+// const GEOAPIFY_API_KEY = "13978f2f87174de799a4f2e250394747";
+
+// const Map = ({ missingBank }) => {
+//   const route = useRoute();
+//   const focused = useIsFocused();
+//   const [location, setLocation] = useState(null);
+//   const [markers, setMarkers] = useState([]);
+
+//   useEffect(() => {
+//     async function getLocationAndPlaces() {
+//       let { status } = await Location.requestForegroundPermissionsAsync();
+//       if (status !== "granted") {
+//         flashMessage("Permission to access location was denied", "danger");
+//         return;
+//       }
+
+//       const loc = await Location.getCurrentPositionAsync({});
+//       const { latitude, longitude } = loc.coords;
+
+//       const region = {
+//         latitude,
+//         longitude,
+//         latitudeDelta: 0.03,
+//         longitudeDelta: 0.04,
+//       };
+
+//       setLocation(region);
+
+//       const categories = [
+//         { name: "service.financial.bank", color: "blue" },
+//         { name: "service.financial.atm", color: "green" },
+//         { name: "service.post.office", color: "red" },
+//         { name: "office.government.public_service", color: "purple" },
+//         { name: "service.financial.bank_mitra", color: "orange" },
+//       ];
+
+//       try {
+//         let allMarkers = [];
+//         for (const category of categories) {
+//           const url = `https://api.geoapify.com/v2/places?categories=${category.name}&filter=circle:${longitude},${latitude},10000&limit=20&apiKey=${GEOAPIFY_API_KEY}`;
+//           const response = await fetch(url);
+//           const json = await response.json();
+
+//           if (!json.features || !Array.isArray(json.features)) {
+//             console.warn(`No valid 'features' array for category: ${category.name}`);
+//             continue;
+//           }
+
+//           const categoryMarkers = json.features.map((place) => ({
+//             id: place.properties.place_id,
+//             name: place.properties.name || `Unnamed ${category.name}`,
+//             address: place.properties.formatted || "No address",
+//             latitude: place.geometry.coordinates[1],
+//             longitude: place.geometry.coordinates[0],
+//             color: category.color,
+//           }));
+
+//           allMarkers = [...allMarkers, ...categoryMarkers];
+//         }
+
+//         setMarkers(allMarkers);
+//       } catch (err) {
+//         console.error("Failed to fetch places", err);
+//         flashMessage("Failed to fetch places", "danger");
+//       }
+//     }
+
+//     getLocationAndPlaces();
+
+//     return () => {
+//       setLocation(null);
+//       setMarkers([]);
+//     };
+//   }, [focused]);
+
+//   const openInMaps = (latitude, longitude) => {
+//     const url = Platform.select({
+//       ios: `maps://?q=${latitude},${longitude}`,
+//       android: `geo:0,0?q=${latitude},${longitude}`,
+//     });
+
+//     // Open Google Maps for Android (if Google Maps is available)
+//     if (Platform.OS === 'android') {
+//       Linking.openURL(`https://www.google.com/maps?q=${latitude},${longitude}`);
+//     } else {
+//       Linking.openURL(url);
+//     }
+//   };
+
+//   const handleButtonPress = () => {
+//     alert("Button pressed! Add your action here.");
+//   };
+
+//   return (
+//     <View
+//       style={{
+//         flex: route.name === "Find" ? 3 : 4,
+//         backgroundColor: "#fff",
+//         alignItems: "center",
+//         justifyContent: "center",
+//       }}
+//     >
+//       <MapView
+//         provider={PROVIDER_GOOGLE}
+//         style={styles.map}
+//         region={location}
+//         showsUserLocation
+//         showsMyLocationButton
+//         followsUserLocation
+//         showsCompass
+//         scrollEnabled
+//         zoomEnabled
+//         pitchEnabled
+//         rotateEnabled
+//         showsTraffic
+//       >
+//         {markers.map((place) => (
+//           <Marker
+//             key={place.id}
+//             coordinate={{ latitude: place.latitude, longitude: place.longitude }}
+//             pinColor={place.color}
+//           >
+//             <Callout>
+//               <View style={styles.calloutContainer}>
+//                 <Text style={styles.calloutTitle}>{place.name}</Text>
+//                 <Text style={styles.calloutAddress}>{place.address}</Text>
+//                 <TouchableOpacity
+//                   onPress={() => openInMaps(place.latitude, place.longitude)}
+//                 >
+//                   <View style={styles.openInMapsButton}>
+//                     <Text style={styles.openInMapsText}>Open in Maps</Text>
+//                   </View>
+//                 </TouchableOpacity>
+//               </View>
+//             </Callout>
+//           </Marker>
+//         ))}
+
+//         {missingBank && location && (
+//           <Marker
+//             coordinate={{
+//               latitude: location.latitude,
+//               longitude: location.longitude,
+//             }}
+//             title="Missing Bank"
+//             description="Reported missing bank location"
+//           >
+//             <Callout>
+//               <View style={styles.calloutContainer}>
+//                 <Text style={styles.calloutTitle}>Missing Bank</Text>
+//                 <Text style={styles.calloutAddress}>
+//                   Reported missing bank location
+//                 </Text>
+//                 <TouchableOpacity
+//                   onPress={() => openInMaps(location.latitude, location.longitude)}
+//                 >
+//                   <View style={styles.openInMapsButton}>
+//                     <Text style={styles.openInMapsText}>Open in Maps</Text>
+//                   </View>
+//                 </TouchableOpacity>
+//               </View>
+//             </Callout>
+//           </Marker>
+//         )}
+//       </MapView>
+
+//       {/* Floating Color Legend */}
+//       <View style={styles.floatingLegend}>
+//         <LegendItem color="blue" label="Bank" />
+//         <LegendItem color="green" label="ATM" />
+//         <LegendItem color="red" label="Post Office" />
+//         <LegendItem color="purple" label="CSC" />
+//         <LegendItem color="orange" label="Bank Mitra" />
+//       </View>
+
+//       {/* Button at Upper Right */}
+//       <TouchableOpacity
+//         style={styles.floatingButton}
+//         onPress={handleButtonPress}
+//       >
+//         <Text style={styles.floatingButtonText}>Press Me</Text>
+//       </TouchableOpacity>
+//     </View>
+//   );
+// };
+
+// // Legend Item component
+// const LegendItem = ({ color, label }) => (
+//   <View style={styles.legendItem}>
+//     <View style={[styles.colorBox, { backgroundColor: color }]} />
+//     <Text style={styles.legendLabel}>{label}</Text>
+//   </View>
+// );
+
+// const styles = StyleSheet.create({
+//   map: {
+//     width: Dimensions.get("window").width,
+//     flex: 1,
+//   },
+//   floatingLegend: {
+//     position: "absolute",
+//     top: 20,
+//     left: 20,
+//     backgroundColor: "rgba(255, 255, 255, 0.95)",
+//     borderRadius: 10,
+//     padding: 10,
+//     elevation: 5,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 4,
+//   },
+//   legendItem: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     marginVertical: 4,
+//   },
+//   colorBox: {
+//     width: 14,
+//     height: 14,
+//     borderRadius: 3,
+//     marginRight: 6,
+//   },
+//   legendLabel: {
+//     fontSize: 12,
+//     color: "#333",
+//   },
+//   calloutContainer: {
+//     width: 200,
+//   },
+//   calloutTitle: {
+//     fontWeight: "bold",
+//     fontSize: 14,
+//   },
+//   calloutAddress: {
+//     fontSize: 12,
+//     marginVertical: 6,
+//   },
+//   openInMapsButton: {
+//     marginTop: 8,
+//     paddingVertical: 6,
+//     paddingHorizontal: 12,
+//     backgroundColor: "#1e90ff",
+//     borderRadius: 5,
+//   },
+//   openInMapsText: {
+//     color: "white",
+//     textAlign: "center",
+//     fontSize: 13,
+//     fontWeight: "bold",
+//   },
+//   floatingButton: {
+//     position: "absolute",
+//     top: 20,
+//     right: 20,
+//     backgroundColor: "#FF5733", // Button color (adjust as needed)
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     borderRadius: 50,
+//     elevation: 5,
+//   },
+//   floatingButtonText: {
+//     color: "white",
+//     fontWeight: "bold",
+//     fontSize: 16,
+//   },
+// });
+
+// export default Map;

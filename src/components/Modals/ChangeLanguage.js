@@ -55,7 +55,7 @@ const ChangeLanguage = () => {
 				<Text></Text>
 			</View>
 
-			{/* <View style={styles.filterWrapper}>
+			{<View style={styles.filterWrapper}>
 				<TextInput
 					value={search}
 					onChangeText={(val) => {
@@ -82,7 +82,7 @@ const ChangeLanguage = () => {
 						color="#8E8E8E"
 					/>
 				</TouchableOpacity>
-			</View> */}
+			</View>}
 
 			<ScrollView
 				showsHorizontalScrollIndicator={false}
@@ -274,3 +274,6 @@ const styles = StyleSheet.create({
 });
 
 export default ChangeLanguage;
+
+
+
