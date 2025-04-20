@@ -8,7 +8,7 @@ export const createSuggestion = async (body ) => {
             authorization: `Bearer ${accessToken}`,
         }
     }
-    const { data } = await post('/suggestions/', body, config);
+    const { data } = await api.post('/suggestions/', body, config);
     console.log(data, 'create suggestions');
     return data;
 }

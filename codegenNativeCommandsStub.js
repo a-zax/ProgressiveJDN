@@ -1,0 +1,2 @@
+// codegenNativeCommandsStub.js
+module.exports = {};

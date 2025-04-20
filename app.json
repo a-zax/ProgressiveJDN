@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "Jan-Dhan-Darshak",
+    "name": "Jan-Dhan-NirDarshak",
     "slug": "Jan-Dhan-Darshak",
     "scheme": "jandhandarshak",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.jpg",

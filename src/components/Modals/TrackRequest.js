@@ -30,22 +30,43 @@ const TrackRequest = () => {
 
       try {
         setIsLoading(true);
-        async function getDetails(){
-          setAccessToken(await SecureStore.getItemAsync('accessToken'));
-          setUserId(await SecureStore.getItemAsync('userId'));
-          // GetTheList();
-
-          const body={User:parseInt(await SecureStore.getItemAsync('userId'))};
-            const res = await SuggestionByUser(accessToken,body);
-            console.log(res.data,'data')
-            if(res?.success === true) {
-              setData(res.data)
-              setFilteredData(res.data);
-              console.log(data, 'data track');
-            } else {
-              console.log(res?.message);
-            }
-        }
+        async function getDetails() {
+          // Skipping token fetch for hardcoded mode
+          const mockData = [
+            {
+              uid: "1", // 🔄 string instead of number
+              address: "Main Street, City Center",
+              otherdetails: "This place lacks proper signage",
+              pointName: "Bank of Baroda",
+              suggestion_status: "Pending",
+            },
+            {
+              uid: "2",
+              address: "MG Road, Sector 22",
+              otherdetails: "ATM not working properly",
+              pointName: "SBI ATM",
+              suggestion_status: "Approved",
+            },
+            {
+              uid: "3",
+              address: "Nehru Chowk, Town Hall",
+              otherdetails: "No wheelchair ramp",
+              pointName: "Post Office",
+              suggestion_status: "Rejected",
+            },
+            {
+              uid: "4",
+              address: "Sector 10, Near Park",
+              otherdetails: "Needs better lighting",
+              pointName: "CSC Center",
+              suggestion_status: "Completed",
+            },
+          ];
+          
+        
+          setData(mockData);
+          setFilteredData(mockData);
+        }        
         // async function GetTheList(){
         //     const body={User:parseInt(userId)};
         //     const res = await SuggestionByUser(accessToken,body);
